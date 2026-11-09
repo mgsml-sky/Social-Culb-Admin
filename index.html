@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MGSML Sky Project - Master Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #050b14 0%, #0d1b2a 40%, #1b0a2a 100%);
+            color: #ffffff;
+            padding-bottom: 50px;
+        }
+
+        .admin-container {
+            width: 94%;
+            max-width: 480px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background: rgba(10, 25, 50, 0.95);
+            border: 2px solid #ffaa00;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 170, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: #ffaa00;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+        }
+
+        .admin-subtitle {
+            font-size: 10px;
+            color: #00ff66;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* Section Cards */
+        .admin-section {
+            background: rgba(12, 28, 55, 0.95);
+            border: 1.5px solid #00e5ff;
+            border-radius: 14px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: #00e5ff;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 9.5px;
+            color: #80e5ff;
+            margin-bottom: 3px;
+            font-weight: 700;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            background: #040b16;
+            border: 1px solid #00e5ff;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #ffaa00, #ff007f);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 900;
+            font-size: 11px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.4);
+            transition: transform 0.2s;
+            margin-top: 6px;
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-box {
+            background: rgba(0, 229, 255, 0.06);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 900;
+            color: #00ff66;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            color: #80e5ff;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Scrollable Config Lists */
+        .scroll-list {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .config-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 18, 44, 0.8);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 10.5px;
+        }
+
+        .config-row input {
+            width: 55px;
+            padding: 4px;
+            background: #040b16;
+            border: 1px solid #ffaa00;
+            color: #ffaa00;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .config-row select {
+            width: 75px;
+            padding: 4px;
+            background: #040b16;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        /* Withdrawal Item */
+        .withdrawal-card {
+            background: rgba(255, 0, 127, 0.06);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="admin-title">🛡️ MGSML MASTER ADMIN PANEL</div>
+            <div class="admin-subtitle">System Status: Active & Synchronized 🟢</div>
+        </div>
+
+        <!-- 1. Platform Statistics & Calculations -->
+        <div class="admin-section">
+            <div class="section-title">📊 Platform Analytics & Calculations</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalDistributedCoins">14,250</div>
+                    <div class="stat-label">Daily Distributed Coins</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="pendingWithdrawalsCount">3</div>
+                    <div class="stat-label">Pending Withdrawals</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalAdImpressions">4,820</div>
+                    <div class="stat-label">Daily Ad Impressions</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="activeUsersCount">1,245</div>
+                    <div class="stat-label">Active Users Today</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Video Boost & Monetization Ad Hub -->
+        <div class="admin-section">
+            <div class="section-title">🚀 Video Boost & Monetization Ad Hub</div>
+            <div class="input-group">
+                <label>Paste Promotional Ad Link (For User Boosts)</label>
+                <input type="text" id="promoAdLinkInput" placeholder="https://your-ad-server.com/promo-ad.mp4">
+            </div>
+            <div class="stats-grid">
+                <div class="input-group" style="margin-bottom:0;">
+                    <label>Select Boost Reward Token ▼</label>
+                    <select id="globalBoostTokenSelect" onchange="saveGlobalToken('boost', this.value)"></select>
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <label>Boost Reach Multiplier</label>
+                    <input type="number" id="boostMultiplierInput" value="5" onchange="saveBoostMultiplier()">
+                </div>
+            </div>
+            <button class="action-btn" onclick="savePromoAdLink()" style="margin-top: 10px;">Save & Launch Ad for Boost</button>
+        </div>
+
+        <!-- 3. 10 Monetization Tiers & Milestone Rewards Manager -->
+        <div class="admin-section">
+            <div class="section-title">🌟 10 Monetization Tiers & Token Distribution</div>
+            <div class="scroll-list" id="adminMonetizeConfigContainer"></div>
+        </div>
+
+        <!-- 4. 10-Tier Affiliate Rewards Control -->
+        <div class="admin-section">
+            <div class="section-title">🔗 10-Tier Affiliate & Token Distribution</div>
+            <div class="scroll-list" id="adminAffiliateConfigContainer"></div>
+        </div>
+
+        <!-- 5. 15 Daily Tasks Control (Reward, Token & Ad Condition Manager) -->
+        <div class="admin-section">
+            <div class="section-title">🎯 15 Daily Tasks, Tokens & Ad Manager</div>
+            <div class="scroll-list" id="adminTasksConfigContainer"></div>
+        </div>
+
+        <!-- 6. Activity Rewards Management (Like, Comment, Share, Upload) -->
+        <div class="admin-section">
+            <div class="section-title">🪙 Activity Earn Boxes & Token Distribution</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="adminActivityRewardsContainer"></div>
+        </div>
+
+        <!-- 7. 20 Tokens Master Price Sync -->
+        <div class="admin-section">
+            <div class="section-title">🪙 20 Tokens Price & DEX Sync</div>
+            <div class="scroll-list" id="adminTokenPriceContainer"></div>
+        </div>
+
+        <!-- 8. Daily Ads & Withdrawal Rules Hub -->
+        <div class="admin-section">
+            <div class="section-title">📺 General Ads, Broadcast & Withdrawal Rules</div>
+            <div class="input-group">
+                <label>General Ad Network Script / API URL</label>
+                <input type="text" id="adNetworkUrlInput" placeholder="https://adnetwork.com/api/v1/serve">
+            </div>
+            <div class="stats-grid" style="margin-top: 10px;">
+                <div class="input-group" style="margin-bottom:0;">
+                    <label>Min Withdrawal (MGSML)</label>
+                    <input type="number" id="minWithdrawalInput" value="50" onchange="saveWithdrawalRules()">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <label>Max Daily Withdrawal</label>
+                    <input type="number" id="maxWithdrawalInput" value="5000" onchange="saveWithdrawalRules()">
+                </div>
+            </div>
+            <div class="input-group" style="margin-top: 10px;">
+                <label>Global Announcement Broadcast Message</label>
+                <textarea id="globalAnnouncementInput" placeholder="Type message to broadcast across all user apps..." style="height: 50px;"></textarea>
+            </div>
+            <button class="action-btn" onclick="saveAdminLinks()">Save & Broadcast</button>
+        </div>
+
+        <!-- 9. Withdrawal Request Approvals -->
+        <div class="admin-section">
+            <div class="section-title">💸 Withdrawal Requests Manager</div>
+            <div id="withdrawalRequestsContainer" style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="withdrawal-card">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 11px;">
+                        <span>User: MGSML-SCS-8842-USER1</span>
+                        <span style="color: #00ff66;">500 MGSML</span>
+                    </div>
+                    <div style="font-size: 9px; color: #80e5ff;">Address: MGSML-SCS-A7F2-USER1</div>
+                    <div style="display: flex; gap: 6px; margin-top: 4px;">
+                        <button class="action-btn" style="margin-top: 0; padding: 6px; background: #00ff66; color: #000;" onclick="approveWithdrawal(this)">Approve ✓</button>
+                        <button class="action-btn" style="margin-top: 0; padding: 6px; background: #ff0055; color: #fff;" onclick="rejectWithdrawal(this)">Reject ✕</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Admin Security Password Change -->
+        <div class="admin-section">
+            <div class="section-title">🔒 Admin Security Settings</div>
+            <div class="input-group">
+                <label>Update Admin Security Password (12+ Characters)</label>
+                <input type="password" id="newAdminPasswordInput" placeholder="Enter new password">
+            </div>
+            <button class="action-btn" style="background: linear-gradient(135deg, #00e5ff, #0066ff); color: #000;" onclick="updateAdminPassword()">Update Password</button>
+        </div>
+    </div>
+
+    <script>
+        const tokenList = [
+            {id: "MGSML", name: "MGSML", price: 1.00},
+            {id: "MG", name: "MG", price: 0.00},
+            {id: "SCS", name: "SCS", price: 0.00},
+            {id: "MLF", name: "MLF", price: 0.00},
+            {id: "MTR", name: "MTR", price: 0.00},
+            {id: "BULT", name: "BULT", price: 0.00},
+            {id: "JKR", name: "JKR", price: 0.00},
+            {id: "BLH", name: "BLH", price: 0.00},
+            {id: "BRH", name: "BRH", price: 0.00},
+            {id: "HRM", name: "HRM", price: 0.00},
+            {id: "DOJI", name: "DOJI", price: 0.00},
+            {id: "SGP", name: "SGP", price: 0.00},
+            {id: "MRB", name: "MRB", price: 0.00},
+            {id: "ULG", name: "ULG", price: 0.00},
+            {id: "BWD", name: "BWD", price: 0.00},
+            {id: "SKY", name: "SKY", price: 0.00},
+            {id: "RKT", name: "RKT", price: 0.00},
+            {id: "GME", name: "GME", price: 0.00},
+            {id: "SSR", name: "SSR", price: 0.00},
+            {id: "TPY", name: "TPY", price: 0.00}
+        ];
+
+        const monetizeTiers = [
+            { id: "tier1", name: "1. Starter Tier 🥉", defaultReward: 10, defaultToken: "MG" },
+            { id: "tier2", name: "2. Bronze Tier 🥈", defaultReward: 50, defaultToken: "MG" },
+            { id: "tier3", name: "3. Silver Tier 🥇", defaultReward: 150, defaultToken: "MG" },
+            { id: "tier4", name: "4. Gold Tier ⭐", defaultReward: 350, defaultToken: "MG" },
+            { id: "tier5", name: "5. Platinum Tier 🌟", defaultReward: 800, defaultToken: "MG" },
+            { id: "tier6", name: "6. Diamond Tier 💎", defaultReward: 1800, defaultToken: "MG" },
+            { id: "tier7", name: "7. Master Tier 👑", defaultReward: 4000, defaultToken: "MG" },
+            { id: "tier8", name: "8. Grandmaster Tier 👑🔥", defaultReward: 9000, defaultToken: "MG" },
+            { id: "tier9", name: "9. Elite Creator 🚀", defaultReward: 20000, defaultToken: "MG" },
+            { id: "tier10", name: "10. Royal Legend 👑⚡", defaultReward: 50000, defaultToken: "MG" }
+        ];
+
+        const affiliateTiers = [
+            { id: "aff1", level: "Level 1", defaultReward: 25, defaultToken: "MGSML" },
+            { id: "aff2", level: "Level 2", defaultReward: 75, defaultToken: "MGSML" },
+            { id: "aff3", level: "Level 3", defaultReward: 180, defaultToken: "MGSML" },
+            { id: "aff4", level: "Level 4", defaultReward: 350, defaultToken: "MGSML" },
+            { id: "aff5", level: "Level 5", defaultReward: 700, defaultToken: "MGSML" },
+            { id: "aff6", level: "Level 6", defaultReward: 1300, defaultToken: "MGSML" },
+            { id: "aff7", level: "Level 7", defaultReward: 2500, defaultToken: "MGSML" },
+            { id: "aff8", level: "Level 8", defaultReward: 5000, defaultToken: "MGSML" },
+            { id: "aff9", level: "Level 9", defaultReward: 10000, defaultToken: "MGSML" },
+            { id: "aff10", level: "Level 10", defaultReward: 25000, defaultToken: "MGSML" }
+        ];
+
+        const masterTasks = [
+            { id: "t1", title: "1. Daily Login Check-in", defaultReward: 5, defaultToken: "MG" },
+            { id: "t2", title: "2. Daily Lucky Spin", defaultReward: 10, defaultToken: "MG" },
+            { id: "t3", title: "3. Watch 3 Short Reels", defaultReward: 8, defaultToken: "MG" },
+            { id: "t4", title: "4. Claim Short Video Tips", defaultReward: 15, defaultToken: "MG" },
+            { id: "t5", title: "5. Like Creator Channel", defaultReward: 3, defaultToken: "MG" },
+            { id: "t6", title: "6. Upload New Video", defaultReward: 20, defaultToken: "MG" },
+            { id: "t7", title: "7. Share App on Socials", defaultReward: 12, defaultToken: "MG" },
+            { id: "t8", title: "8. Invite Friends (Referral)", defaultReward: 25, defaultToken: "MG" },
+            { id: "t9", title: "9. Daily Crypto Tech Quiz", defaultReward: 10, defaultToken: "MG" },
+            { id: "t10", title: "10. Watch Long Movie", defaultReward: 15, defaultToken: "MG" },
+            { id: "t11", title: "11. Hold Tokens in Wallet", defaultReward: 30, defaultToken: "MG" },
+            { id: "t12", title: "12. Submit Feedback", defaultReward: 10, defaultToken: "MG" },
+            { id: "t13", title: "13. Active Community Chat", defaultReward: 5, defaultToken: "MG" },
+            { id: "t14", title: "14. Reach Milestone Tier", defaultReward: 50, defaultToken: "MG" },
+            { id: "t15", title: "15. Watch Ad for Reach", defaultReward: 10, defaultToken: "MG" }
+        ];
+
+        const activityRewards = [
+            { id: "movie", name: "🎬 Watch Movies", defaultReward: 8, defaultToken: "MG" },
+            { id: "like", name: "👍 Video Like", defaultReward: 5, defaultToken: "MG" },
+            { id: "comment", name: "💬 Comment", defaultReward: 3, defaultToken: "MG" },
+            { id: "share", name: "🔗 Video Share", defaultReward: 4, defaultToken: "MG" },
+            { id: "upload", name: "📹 Video Upload", defaultReward: 10, defaultToken: "MG" }
+        ];
+
+        window.onload = function() {
+            populateGlobalTokenDropdowns();
+            renderAdminMonetizeConfig();
+            renderAdminAffiliateConfig();
+            renderAdminTasksConfig();
+            renderAdminActivityRewards();
+            renderAdminTokenPrices();
+            loadSavedAdminData();
+        };
+
+        function generateTokenOptions(selectedToken) {
+            let options = '';
+            tokenList.forEach(t => {
+                options += `<option value="${t.id}" ${t.id === selectedToken ? 'selected' : ''}>${t.id}</option>`;
+            });
+            return options;
+        }
+
+        function populateGlobalTokenDropdowns() {
+            const boostSelect = document.getElementById('globalBoostTokenSelect');
+            if(boostSelect) {
+                let saved = localStorage.getItem('admin_token_boost') || 'MGSML';
+                boostSelect.innerHTML = generateTokenOptions(saved);
+            }
+        }
+
+        function saveGlobalToken(type, val) {
+            localStorage.setItem('admin_token_' + type, val);
+            alert("Token selection updated successfully!");
+        }
+
+        function renderAdminMonetizeConfig() {
+            const container = document.getElementById('adminMonetizeConfigContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            monetizeTiers.forEach(tier => {
+                let currentVal = localStorage.getItem('admin_reward_' + tier.id) || tier.defaultReward;
+                let currentTok = localStorage.getItem('admin_token_' + tier.id) || tier.defaultToken;
+                let div = document.createElement('div');
+                div.className = 'config-row';
+                div.innerHTML = `
+                    <span style="font-weight:bold; color:#fff; font-size:10px;">${tier.name}</span>
+                    <div style="display:flex; align-items:center; gap:5px;">
+                        <select id="adminMonetizeTok_${tier.id}" onchange="updateAdminMonetizeToken('${tier.id}')">${generateTokenOptions(currentTok)}</select>
+                        <input type="number" id="adminMonetizeInput_${tier.id}" value="${currentVal}" onchange="updateAdminMonetizeReward('${tier.id}')">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateAdminMonetizeReward(tierId) {
+            let val = document.getElementById('adminMonetizeInput_' + tierId).value;
+            localStorage.setItem('admin_reward_' + tierId, val);
+            alert("Monetization reward updated!");
+        }
+
+        function updateAdminMonetizeToken(tierId) {
+            let tok = document.getElementById('adminMonetizeTok_' + tierId).value;
+            localStorage.setItem('admin_token_' + tierId, tok);
+            alert("Monetization token updated!");
+        }
+
+        function renderAdminAffiliateConfig() {
+            const container = document.getElementById('adminAffiliateConfigContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            affiliateTiers.forEach(aff => {
+                let currentVal = localStorage.getItem('admin_aff_reward_' + aff.id) || aff.defaultReward;
+                let currentTok = localStorage.getItem('admin_aff_token_' + aff.id) || aff.defaultToken;
+                let div = document.createElement('div');
+                div.className = 'config-row';
+                div.innerHTML = `
+                    <span style="font-weight:bold; color:#fff;">${aff.level}</span>
+                    <div style="display:flex; align-items:center; gap:5px;">
+                        <select id="adminAffTok_${aff.id}" onchange="updateAffToken('${aff.id}')">${generateTokenOptions(currentTok)}</select>
+                        <input type="number" id="adminAffInput_${aff.id}" value="${currentVal}" onchange="updateAffReward('${aff.id}')">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateAffReward(affId) {
+            let val = document.getElementById('adminAffInput_' + affId).value;
+            localStorage.setItem('admin_aff_reward_' + affId, val);
+            alert("Affiliate reward updated!");
+        }
+
+        function updateAffToken(affId) {
+            let tok = document.getElementById('adminAffTok_' + affId).value;
+            localStorage.setItem('admin_aff_token_' + affId, tok);
+            alert("Affiliate token updated!");
+        }
+
+        function renderAdminTasksConfig() {
+            const container = document.getElementById('adminTasksConfigContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            masterTasks.forEach(task => {
+                let currentReward = localStorage.getItem('admin_task_reward_' + task.id) || task.defaultReward;
+                let currentTok = localStorage.getItem('admin_task_token_' + task.id) || task.defaultToken;
+                let adRequired = localStorage.getItem('admin_task_ad_' + task.id) !== 'false';
+                let isEnabled = localStorage.getItem('admin_task_enabled_' + task.id) !== 'false';
+
+                let div = document.createElement('div');
+                div.className = 'config-row';
+                div.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:2px; max-width:160px;">
+                        <span style="font-weight:bold; color:#fff; font-size:10px;">${task.title}</span>
+                        <span style="font-size:9px; color:#80e5ff;">Ad Req: <select id="taskAd_${task.id}" onchange="updateTaskAdConfig('${task.id}')" style="width:55px;">
+                            <option value="true" ${adRequired?'selected':''}>Yes</option>
+                            <option value="false" ${!adRequired?'selected':''}>No</option>
+                        </select></span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px;">
+                        <select id="taskTok_${task.id}" onchange="updateTaskToken('${task.id}')">${generateTokenOptions(currentTok)}</select>
+                        <input type="number" id="taskReward_${task.id}" value="${currentReward}" onchange="updateTaskReward('${task.id}')">
+                        <select id="taskStatus_${task.id}" onchange="updateTaskStatus('${task.id}')" style="width:55px;">
+                            <option value="true" ${isEnabled?'selected':''}>On</option>
+                            <option value="false" ${!isEnabled?'selected':''}>Off</option>
+                        </select>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateTaskReward(taskId) {
+            let val = document.getElementById('taskReward_' + taskId).value;
+            localStorage.setItem('admin_task_reward_' + taskId, val);
+            alert("Task reward updated!");
+        }
+
+        function updateTaskToken(taskId) {
+            let tok = document.getElementById('taskTok_' + taskId).value;
+            localStorage.setItem('admin_task_token_' + taskId, tok);
+            alert("Task token updated!");
+        }
+
+        function updateTaskAdConfig(taskId) {
+            let val = document.getElementById('taskAd_' + taskId).value;
+            localStorage.setItem('admin_task_ad_' + taskId, val);
+            alert("Task ad requirement updated!");
+        }
+
+        function updateTaskStatus(taskId) {
+            let val = document.getElementById('taskStatus_' + taskId).value;
+            localStorage.setItem('admin_task_enabled_' + taskId, val);
+            alert("Task status updated!");
+        }
+
+        function renderAdminActivityRewards() {
+            const container = document.getElementById('adminActivityRewardsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            activityRewards.forEach(act => {
+                let currentVal = localStorage.getItem('admin_activity_reward_' + act.id) || act.defaultReward;
+                let currentTok = localStorage.getItem('admin_activity_token_' + act.id) || act.defaultToken;
+
+                let div = document.createElement('div');
+                div.className = 'config-row';
+                div.innerHTML = `
+                    <span style="font-weight:bold; color:#fff;">${act.name}:</span>
+                    <div style="display:flex; align-items:center; gap:5px;">
+                        <select id="actTok_${act.id}" onchange="updateActivityToken('${act.id}')">${generateTokenOptions(currentTok)}</select>
+                        <input type="number" id="actReward_${act.id}" value="${currentVal}" onchange="updateActivityReward('${act.id}')">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateActivityReward(actId) {
+            let val = document.getElementById('actReward_' + actId).value;
+            localStorage.setItem('admin_activity_reward_' + actId, val);
+            alert("Activity reward updated!");
+        }
+
+        function updateActivityToken(actId) {
+            let tok = document.getElementById('actTok_' + actId).value;
+            localStorage.setItem('admin_activity_token_' + actId, tok);
+            alert("Activity token updated!");
+        }
+
+        function renderAdminTokenPrices() {
+            const container = document.getElementById('adminTokenPriceContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            tokenList.forEach(t => {
+                let currentPrice = localStorage.getItem('token_price_' + t.id) || t.price;
+                let div = document.createElement('div');
+                div.className = 'config-row';
+                div.innerHTML = `
+                    <span>${t.name} Price ($):</span>
+                    <input type="number" step="0.01" id="tokenPriceInput_${t.id}" value="${currentPrice}" onchange="updateTokenPrice('${t.id}')">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateTokenPrice(tokenId) {
+            let val = document.getElementById('tokenPriceInput_' + tokenId).value;
+            localStorage.setItem('token_price_' + tokenId, val);
+            alert(`${tokenId} price synchronized!`);
+        }
+
+        function savePromoAdLink() {
+            let link = document.getElementById('promoAdLinkInput').value.trim();
+            if(!link) return alert("Please enter a valid promotional ad link!");
+            localStorage.setItem('admin_promo_ad_link', link);
+            alert("Promotional ad link saved!");
+        }
+
+        function saveBoostMultiplier() {
+            let mult = document.getElementById('boostMultiplierInput').value;
+            localStorage.setItem('admin_boost_multiplier', mult);
+            alert("Boost multiplier updated!");
+        }
+
+        function saveWithdrawalRules() {
+            let minW = document.getElementById('minWithdrawalInput').value;
+            let maxW = document.getElementById('maxWithdrawalInput').value;
+            localStorage.setItem('admin_min_withdrawal', minW);
+            localStorage.setItem('admin_max_withdrawal', maxW);
+            alert("Withdrawal limits updated!");
+        }
+
+        function saveAdminLinks() {
+            let adUrl = document.getElementById('adNetworkUrlInput').value.trim();
+            let msg = document.getElementById('globalAnnouncementInput').value.trim();
+
+            if(adUrl) localStorage.setItem('admin_ad_network_url', adUrl);
+            if(msg) localStorage.setItem('admin_global_broadcast', msg);
+
+            alert("General settings saved!");
+        }
+
+        function approveWithdrawal(btn) {
+            btn.parentElement.parentElement.style.opacity = '0.4';
+            btn.parentElement.innerHTML = '<span style="color: #00ff66; font-weight: bold;">Approved & Transferred ✓</span>';
+            let countEl = document.getElementById('pendingWithdrawalsCount');
+            let current = parseInt(countEl.innerText) || 1;
+            if(current > 0) countEl.innerText = current - 1;
+            alert("Withdrawal approved!");
+        }
+
+        function rejectWithdrawal(btn) {
+            btn.parentElement.parentElement.style.opacity = '0.4';
+            btn.parentElement.innerHTML = '<span style="color: #ff0055; font-weight: bold;">Rejected ✕</span>';
+            let countEl = document.getElementById('pendingWithdrawalsCount');
+            let current = parseInt(countEl.innerText) || 1;
+            if(current > 0) countEl.innerText = current - 1;
+            alert("Withdrawal rejected!");
+        }
+
+        function updateAdminPassword() {
+            let newPass = document.getElementById('newAdminPasswordInput').value.trim();
+            if(!newPass || newPass.length < 4) {
+                return alert("Please enter a valid security password (minimum 4+ characters)!");
+            }
+            localStorage.setItem('admin_m_pin', newPass);
+            document.getElementById('newAdminPasswordInput').value = '';
+            alert("Admin security password updated!");
+        }
+
+        function loadSavedAdminData() {
+            let promoLink = localStorage.getItem('admin_promo_ad_link');
+            let boostMult = localStorage.getItem('admin_boost_multiplier');
+            let savedAdUrl = localStorage.getItem('admin_ad_network_url');
+            let savedMsg = localStorage.getItem('admin_global_broadcast');
+            let minW = localStorage.getItem('admin_min_withdrawal');
+            let maxW = localStorage.getItem('admin_max_withdrawal');
+
+            if(promoLink && document.getElementById('promoAdLinkInput')) document.getElementById('promoAdLinkInput').value = promoLink;
+            if(boostMult && document.getElementById('boostMultiplierInput')) document.getElementById('boostMultiplierInput').value = boostMult;
+            if(savedAdUrl && document.getElementById('adNetworkUrlInput')) document.getElementById('adNetworkUrlInput').value = savedAdUrl;
+            if(savedMsg && document.getElementById('globalAnnouncementInput')) document.getElementById('globalAnnouncementInput').value = savedMsg;
+            if(minW && document.getElementById('minWithdrawalInput')) document.getElementById('minWithdrawalInput').value = minW;
+            if(maxW && document.getElementById('maxWithdrawalInput')) document.getElementById('maxWithdrawalInput').value = maxW;
+        }
+    </script>
+</body>
+</html>
